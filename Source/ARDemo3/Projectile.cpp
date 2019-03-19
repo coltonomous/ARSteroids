@@ -1,4 +1,5 @@
 #include "Projectile.h"
+#include "Asteroid.h"
 
 
 // Sets default values
@@ -12,8 +13,10 @@ AProjectile::AProjectile()
     // Setup collision detection for actor
     collider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
     collider->SetSphereRadius(50.f);
-    collider->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnProjectileOverlap);
+    collider->OnComponentHit.AddDynamic(this, &AProjectile::OnProjectileHit);
     collider->SetupAttachment(SphereMesh);
+    collider->SetCollisionProfileName(TEXT("BlockAll"));
+    collider->SetNotifyRigidBodyCollision(true);
     
     // Use a ProjectileMovementComponent to govern this projectile's movement
     projectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
@@ -57,19 +60,24 @@ void AProjectile::AssignMaterials(UStaticMeshComponent* MyMesh)
 
 
 // Collision detection with other components
-void AProjectile::OnProjectileOverlap(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AProjectile::OnProjectileHit(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, FVector NormalImpulse, const FHitResult& hit)
 {
     FVector hitLocation = GetActorLocation();
+    FVector direction = projectileMovement->Velocity;
     
     // If projectile hits something besides itself
     if(otherActor != nullptr && otherActor != this && otherComp != nullptr){
-        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffect, hitLocation);
+        
+        // Play hit effects
+        UParticleSystemComponent* hitReference = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffect, hitLocation);
+        hitReference->SetWorldScale3D(FVector(3.f, 3.f, 3.f));
+        
         Destroy();
         
         // If that thing is an asteroid
         if (AAsteroid* Asteroid = Cast<AAsteroid>(otherActor))
         {
-            Asteroid->TakeProjectileDamage(hitLocation, GetActorForwardVector());
+            Asteroid->TakeProjectileDamage(hitLocation, NormalImpulse);
         }
     }
 }

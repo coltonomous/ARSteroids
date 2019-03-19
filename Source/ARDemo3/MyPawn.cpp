@@ -1,4 +1,5 @@
 #include "MyPawn.h"
+#include "Projectile.h"
 
 
 // Sets default values
@@ -74,7 +75,7 @@ void AMyPawn::LookRight(float value)
 }
 
 
-// Spawns a projectile along forwd vetor
+// Spawns a projectile along forward vetor
 void AMyPawn::FireProjectile()
 {
     FVector spawnLocation = OurCamera->GetComponentLocation();

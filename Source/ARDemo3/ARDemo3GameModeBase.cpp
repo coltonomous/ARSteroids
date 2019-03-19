@@ -1,9 +1,16 @@
 #include "ARDemo3GameModeBase.h"
-
+#include "MyPawn.h"
+#include "MyPlayerController.h"
 
 AARDemo3GameModeBase::AARDemo3GameModeBase()
 {
     DefaultPawnClass = AMyPawn::StaticClass();
+    PlayerControllerClass = AMyPlayerController::StaticClass();
+    
+    //static ConstructorHelpers::FObjectFinder<UUserWidget> HUDTemplate(TEXT("/Game/Resources/Menus/HUD.HUD_C"));
+    //if(HUDTemplate.Succeeded()){
+        //ChangeMenuWidget(HUDTemplate);
+    //}
 }
 
 
@@ -11,7 +18,36 @@ AARDemo3GameModeBase::AARDemo3GameModeBase()
 void AARDemo3GameModeBase::BeginPlay()
 {
     Super::BeginPlay();
+    this->score = 0;
     ChangeMenuWidget(StartingWidgetClass);
+}
+
+
+// Retrieves the current score
+int AARDemo3GameModeBase::GetScore() const
+{
+    return this->score;
+}
+
+
+// Retrieves current asteroids in level - for slider in settings menu
+int AARDemo3GameModeBase::GetAsteroids() const
+{
+    int count = 0;
+    for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+    {
+        if(ActorItr->GetClass()->GetName().Compare(FString(TEXT("Asteroid"))) == 0){
+            count ++;
+        }
+    }
+    return count;
+}
+
+
+// Increments the global score counter
+void AARDemo3GameModeBase::UpdateScore()
+{
+    this->score += 1;
 }
 
 

@@ -5,7 +5,6 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Asteroid.h"
 #include "Projectile.generated.h"
 
 
@@ -28,9 +27,8 @@ protected:
     // Assigns material to spawned actor mesh
     void AssignMaterials(UStaticMeshComponent*);
     
-    // Detects collision with other actors
     UFUNCTION()
-    void OnProjectileOverlap(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+    void OnProjectileHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
     
     // Hit box component
     UPROPERTY()

@@ -2,10 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
-#include "Projectile.h"
-#include "Kismet/GameplayStatics.h"
 #include "Runtime/AugmentedReality/Public/ARBlueprintLibrary.h"
 #include "Runtime/AugmentedReality/Public/ARSessionConfig.h"
 #include "MyPawn.generated.h"

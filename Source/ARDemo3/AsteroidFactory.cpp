@@ -1,4 +1,5 @@
 #include "AsteroidFactory.h"
+#include "Asteroid.h"
 
 
 // Sets default values
@@ -15,7 +16,14 @@ void AAsteroidFactory::BeginPlay()
 {
     Super::BeginPlay();
     
-    for(int i = 0; i < this->bodiesToSpawn; i++){
+    SpawnBodies(this->bodiesToSpawn);
+}
+
+
+// Spawns additional asteroids
+void AAsteroidFactory::SpawnBodies(int bodies)
+{
+    for(int i = 0; i < bodies; i++){
         SpawnSingleBody();
     }
 }

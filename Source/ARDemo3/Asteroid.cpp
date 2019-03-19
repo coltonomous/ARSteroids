@@ -1,4 +1,5 @@
 #include "Asteroid.h"
+#include "ARDemo3GameModeBase.h"
 
 
 // Sets default values
@@ -52,12 +53,20 @@ void AAsteroid::TakeProjectileDamage(FVector hitLocation, FVector normal)
     // Play hit effects
     if(HitSound != nullptr){
         UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
-        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, hitLocation);
+        UParticleSystemComponent* hitReference = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, hitLocation);
+        hitReference->SetWorldScale3D(FVector(20.f, 20.f, 20.f));
     }
     
     if(this->health <= 0){
+        
+        // Update score
+        AARDemo3GameModeBase * GameMode= (AARDemo3GameModeBase *)GetWorld()->GetAuthGameMode();
+        GameMode->UpdateScore();
+        
         // Play explosion sound
         if(ExplosionSound != nullptr){
+            UParticleSystemComponent* explosionReference = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, hitLocation);
+            explosionReference->SetWorldScale3D(FVector(50.f, 50.f, 50.f));
             UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());
         }
         
@@ -66,8 +75,6 @@ void AAsteroid::TakeProjectileDamage(FVector hitLocation, FVector normal)
         
     } else{
         Mesh->SetLinearDamping(1.8f);
-        Mesh->AddImpulse(normal * 3000.f, FName(TEXT("None")), true);
-        Mesh->AddAngularImpulseInRadians((normal - GetActorForwardVector()), FName(TEXT("None")), true);
     }
 }
 

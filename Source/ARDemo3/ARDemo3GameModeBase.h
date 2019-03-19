@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Blueprint/UserWidget.h"
-#include "MyPawn.h"
+#include "EngineUtils.h"
 #include "ARDemo3GameModeBase.generated.h"
 
 
@@ -21,15 +21,31 @@ public:
     UFUNCTION(BlueprintCallable, Category = "UMG Game")
     void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
     
+    // Retrieves score
+    UFUNCTION(BlueprintCallable, Category = "Score")
+    int GetScore() const;
+    
+    // Retrieves number of asteroids in level
+    UFUNCTION(BlueprintCallable, Category = "Asteroids")
+    int GetAsteroids() const;
+    
+    // Increments score
+    UFUNCTION(Category = "Score")
+    void UpdateScore();
+    
 protected:
     
     // Master function for setting initial state; 
     virtual void BeginPlay() override;
     
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD", Meta = (BlueprintProtected = "true"))
+    int score;
+    
     // Starting widget
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD", Meta = (BlueprintProtected = "true"))
     TSubclassOf<UUserWidget> StartingWidgetClass;
     
+    // Instance of starting widget
     UPROPERTY()
     UUserWidget* CurrentWidget;
 };

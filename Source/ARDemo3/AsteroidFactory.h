@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Asteroid.h"
 #include "AsteroidFactory.generated.h"
 
 
@@ -17,6 +16,10 @@ class ARDEMO3_API AAsteroidFactory : public AActor
 public:
     // Sets default values for this actor's properties
     AAsteroidFactory();
+    
+    // Spanws bodies based on passed int - controlled by menu slider
+    UFUNCTION(BlueprintCallable, Category = "Spawn")
+    void SpawnBodies(int bodies);
     
 protected:
     // Called when the game starts or when spawned
