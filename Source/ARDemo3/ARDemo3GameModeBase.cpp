@@ -7,10 +7,10 @@ AARDemo3GameModeBase::AARDemo3GameModeBase()
     DefaultPawnClass = AMyPawn::StaticClass();
     PlayerControllerClass = AMyPlayerController::StaticClass();
     
-    //static ConstructorHelpers::FObjectFinder<UUserWidget> HUDTemplate(TEXT("/Game/Resources/Menus/HUD.HUD_C"));
-    //if(HUDTemplate.Succeeded()){
-        //ChangeMenuWidget(HUDTemplate);
-    //}
+    static ConstructorHelpers::FClassFinder<UUserWidget> HUDTemplate(TEXT("/Game/Resources/Menus/HUD.HUD_C"));
+    if(HUDTemplate.Succeeded()){
+        StartingWidgetClass = HUDTemplate.Class;
+    }
 }
 
 
